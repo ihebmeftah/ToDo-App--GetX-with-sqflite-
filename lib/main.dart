@@ -1,4 +1,8 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:todo/ui/pages/notification_screen.dart';
 
 import 'ui/pages/home_page.dart';
 
@@ -11,10 +15,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
+      theme: ThemeData(primaryColor: Colors.teal, backgroundColor: Colors.teal),
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: const NotificationScreen(
+        payLoad: 't|d|e',
+      ),
     );
   }
 }
