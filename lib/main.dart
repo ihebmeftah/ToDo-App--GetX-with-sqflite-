@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       home: const NotificationScreen(
-        payLoad: 't|d|e',
+        payLoad: 'title|description|10:20',
       ),
     );
   }
