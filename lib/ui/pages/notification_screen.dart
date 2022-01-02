@@ -24,7 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return Scaffold(
       appBar: AppBar(
           title: Text(
-            _payLoad.toString().split('|')[1],
+            _payLoad.toString().split('|')[0],
             style:
                 TextStyle(color: Get.isDarkMode ? Colors.white : darkGreyClr),
           ),

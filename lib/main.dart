@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/ui/pages/notification_screen.dart';
+import 'package:todo/ui/theme.dart';
 
 import 'ui/pages/home_page.dart';
 
@@ -16,7 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme: ThemeData(primaryColor: Colors.teal, backgroundColor: Colors.teal),
+      theme: Themes.light,
+      darkTheme: Themes.dark,
+      themeMode: ThemeMode.light,
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       home: const NotificationScreen(
