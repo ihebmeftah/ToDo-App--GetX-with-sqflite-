@@ -34,6 +34,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
       appBar: appbar(),
       body: SingleChildScrollView(
         child: Container(

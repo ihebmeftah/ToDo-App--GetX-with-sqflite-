@@ -22,6 +22,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
       appBar: AppBar(
           title: Text(
             _payLoad.toString().split('|')[0],

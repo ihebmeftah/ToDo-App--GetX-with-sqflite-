@@ -18,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+        backgroundColor: context.theme.backgroundColor,
         appBar: appbar(),
         body: Center(
           child: MyButton(
