@@ -1,5 +1,9 @@
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:todo/controllers/task_controller.dart';
 import 'package:todo/services/theme_services.dart';
 import 'package:todo/ui/pages/add_task_page.dart';
 import 'package:todo/ui/size_config.dart';
@@ -14,19 +18,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TaskController _taskController = Get.put(TaskController());
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
         backgroundColor: context.theme.backgroundColor,
         appBar: appbar(),
-        body: Center(
-          child: MyButton(
-            label: 'Add Task',
-            ontap: () {
-              Get.to(const AddTaskPage());
-            },
-          ),
+        body: Column(
+          children: [_addtaskBar()],
         ));
   }
 
@@ -51,4 +52,35 @@ class _HomePageState extends State<HomePage> {
               ThemeServices().switchTheme();
             },
           ));
+
+  _addtaskBar() {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                DateFormat.yMMMMd().format(DateTime.now()).toString(),
+                style: Themes().headingStyle,
+              ),
+              Text(
+                'Today',
+                style: Themes().headingStyle,
+              ),
+            ],
+          ),
+          MyButton(
+            label: '+ Add Task',
+            ontap: () async {
+              await Get.to(() => const AddTaskPage());
+              _taskController.getTasks();
+            },
+          )
+        ],
+      ),
+    );
+  }
 }
