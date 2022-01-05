@@ -1,7 +1,9 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, prefer_const_constructors
 
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/controllers/task_controller.dart';
 import 'package:todo/services/theme_services.dart';
@@ -19,7 +21,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TaskController _taskController = Get.put(TaskController());
-
+  DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -27,7 +29,10 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: context.theme.backgroundColor,
         appBar: appbar(),
         body: Column(
-          children: [_addtaskBar()],
+          children: [
+            _addtaskBar(),
+            _addDateBar(),
+          ],
         ));
   }
 
@@ -80,6 +85,34 @@ class _HomePageState extends State<HomePage> {
             },
           )
         ],
+      ),
+    );
+  }
+
+  _addDateBar() {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: DatePicker(
+        DateTime.now(),
+        width: 80,
+        height: 100,
+        selectedTextColor: Colors.white,
+        selectionColor: primaryClr,
+        onDateChange: (newDate) {
+          setState(() {
+            selectedDate = newDate;
+          });
+        },
+        dateTextStyle: GoogleFonts.lato(
+            textStyle: const TextStyle(
+                color: Colors.grey, fontSize: 20, fontWeight: FontWeight.w600)),
+        monthTextStyle: GoogleFonts.lato(
+            textStyle: TextStyle(
+                color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w600)),
+        dayTextStyle: GoogleFonts.lato(
+            textStyle: TextStyle(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600)),
+        initialSelectedDate: selectedDate,
       ),
     );
   }
