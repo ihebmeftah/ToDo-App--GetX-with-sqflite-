@@ -18,7 +18,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        backgroundColor: context.theme.backgroundColor,
         appBar: appbar(),
         body: Center(
           child: MyButton(
@@ -30,27 +29,25 @@ class _HomePageState extends State<HomePage> {
         ));
   }
 
-  AppBar appbar() {
-    return AppBar(
-        actions: const [
-          CircleAvatar(
-            backgroundImage: AssetImage('images/person.jpeg'),
-          ),
-          SizedBox(
-            width: 20,
-          )
-        ],
-        elevation: 0,
-        backgroundColor: context.theme.backgroundColor,
-        leading: IconButton(
-          icon: Icon(
-            Icons.wb_sunny,
-            size: 24,
-            color: Get.isDarkMode ? primaryClr : darkGreyClr,
-          ),
-          onPressed: () {
-            ThemeServices().switchTheme();
-          },
-        ));
-  }
+  AppBar appbar() => AppBar(
+          actions: const [
+            CircleAvatar(
+              backgroundImage: AssetImage('images/person.jpeg'),
+            ),
+            SizedBox(
+              width: 20,
+            )
+          ],
+          elevation: 0,
+          backgroundColor: context.theme.backgroundColor,
+          leading: IconButton(
+            icon: Icon(
+              Get.isDarkMode ? Icons.wb_sunny : Icons.nightlight_round_rounded,
+              size: 24,
+              color: Get.isDarkMode ? Colors.white : darkGreyClr,
+            ),
+            onPressed: () {
+              ThemeServices().switchTheme();
+            },
+          ));
 }

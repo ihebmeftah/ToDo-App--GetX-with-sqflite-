@@ -18,7 +18,7 @@ class Themes {
   static final dark = ThemeData(
       primaryColor: darkGreyClr,
       backgroundColor: darkGreyClr,
-      brightness: Brightness.light);
+      brightness: Brightness.dark);
 
   TextStyle get headingStyle {
     return GoogleFonts.lato(
