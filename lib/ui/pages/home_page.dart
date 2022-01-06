@@ -2,6 +2,7 @@
 
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -32,6 +33,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             _addtaskBar(),
             _addDateBar(),
+            SizedBox(
+              height: 20,
+            ),
+            _showTasks(),
           ],
         ));
   }
@@ -114,6 +119,60 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600)),
         initialSelectedDate: selectedDate,
       ),
+    );
+  }
+
+  _showTasks() {
+    return Expanded(
+      child: _notTasks(),
+    );
+    // return Obx(() {
+    //   if (_taskController.taskList.isEmpty) {
+    //     return _notTasks();
+    //   } else {
+    //     return Container();
+    //   }
+    // });
+  }
+
+  _notTasks() {
+    return Stack(
+      children: [
+        AnimatedPositioned(
+          duration: Duration(microseconds: 2000),
+          child: SingleChildScrollView(
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              direction: SizeConfig.orientation == Orientation.landscape
+                  ? Axis.horizontal
+                  : Axis.vertical,
+              children: [
+                SizeConfig.orientation == Orientation.landscape
+                    ? SizedBox(height: 6)
+                    : SizedBox(height: 220),
+                SvgPicture.asset(
+                  'images/task.svg',
+                  height: 90,
+                  color: primaryClr.withOpacity(0.5),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                  child: Text(
+                    'You do not have any task yet! \n add new task to make your days productive',
+                    style: Themes().subTitleStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizeConfig.orientation == Orientation.landscape
+                    ? SizedBox(height: 120)
+                    : SizedBox(height: 180),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
