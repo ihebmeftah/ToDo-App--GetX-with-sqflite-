@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/controllers/task_controller.dart';
+import 'package:todo/services/notification_services.dart';
 import 'package:todo/services/theme_services.dart';
 import 'package:todo/ui/pages/add_task_page.dart';
 import 'package:todo/ui/size_config.dart';
@@ -21,6 +22,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late NotifyHelper notifyHelper;
+  @override
+  void initState() {
+    super.initState();
+    notifyHelper = NotifyHelper();
+    notifyHelper.requestIosPermission();
+    notifyHelper.intializeNotification();
+  }
+
   final TaskController _taskController = Get.put(TaskController());
   DateTime selectedDate = DateTime.now();
   @override
@@ -60,6 +70,9 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () {
               ThemeServices().switchTheme();
+              NotifyHelper().dispalyNotification(
+                  title: 'theme changed', body: 'theme changed');
+              //  NotifyHelper().scheduledNotifications();
             },
           ));
 

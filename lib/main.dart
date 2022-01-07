@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo/services/notification_services.dart';
 import 'package:todo/ui/pages/notification_screen.dart';
 import 'package:todo/ui/theme.dart';
 
@@ -10,6 +11,8 @@ import 'ui/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized;
+  //NotifyHelper().intializeNotification();
 }
 
 class MyApp extends StatelessWidget {
