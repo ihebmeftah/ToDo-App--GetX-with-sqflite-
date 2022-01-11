@@ -79,8 +79,8 @@ class TaskTile extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
-              height: double.infinity,
-              width: 1,
+              height: 60,
+              width: 0.5,
               color: Colors.grey[200]!.withOpacity(0.7),
             ),
             RotatedBox(
@@ -106,7 +106,7 @@ class TaskTile extends StatelessWidget {
         return bluishClr;
       case 1:
         return pinkClr;
-      case 3:
+      case 2:
         return orangeClr;
       default:
         return bluishClr;

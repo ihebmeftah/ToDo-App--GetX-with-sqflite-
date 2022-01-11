@@ -2,6 +2,7 @@
 
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -139,25 +140,28 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     return Expanded(
-      child: GestureDetector(
-        onTap: () {
-          showBottomSheet(
-              context,
-              Task(
-                  title: 'xml',
-                  startTime: '20.50',
-                  endTime: ' 23.00',
-                  color: 1,
-                  note: 'klfnqfnfdfjqnbfjdfqfqlffjfbql',
-                  isCompleted: 1));
+      child: ListView.builder(
+        scrollDirection: SizeConfig.orientation == Orientation.landscape
+            ? Axis.horizontal
+            : Axis.vertical,
+        itemCount: _taskController.taskList.length,
+        itemBuilder: (context, index) {
+          var task = _taskController.taskList[index];
+
+          return AnimationConfiguration.staggeredList(
+            duration: Duration(milliseconds: 1375),
+            position: index,
+            child: SlideAnimation(
+              horizontalOffset: 300,
+              child: FadeInAnimation(
+                child: GestureDetector(
+                  onTap: () => showBottomSheet(context, task),
+                  child: TaskTile(task),
+                ),
+              ),
+            ),
+          );
         },
-        child: TaskTile(Task(
-            title: 'xml',
-            startTime: '20.50',
-            endTime: ' 23.00',
-            color: 1,
-            note: 'klfnqfnfdfjqnbfjdfqfqlffjfbql',
-            isCompleted: 1)),
       ),
     );
     // return Obx(() {
@@ -281,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         clr: primaryClr),
                 _buildBottomSheet(
-                    label: 'Delete completed',
+                    label: 'Delete ',
                     onTap: () {
                       Get.back();
                     },
@@ -290,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                   color: Get.isDarkMode ? Colors.grey : darkGreyClr,
                 ),
                 _buildBottomSheet(
-                    label: 'Cancel completed',
+                    label: 'Cancel ',
                     onTap: () {
                       Get.back();
                     },
