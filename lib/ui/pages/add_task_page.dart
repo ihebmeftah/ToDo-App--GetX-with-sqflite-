@@ -227,6 +227,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           ));
 
   Widget colorpalette() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Color',

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, prefer_const_constructors
+// ignore_for_file: unused_field, prefer_const_constructors, unused_element
 
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
@@ -139,12 +139,26 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     return Expanded(
-      child: TaskTile(Task(
-          title: 'xml',
-          startTime: '20.50',
-          endTime: ' 23.00',
-          color: 1,
-          note: 'klfnqfnfdfjqnbfjdfqfqlffjfbql')),
+      child: GestureDetector(
+        onTap: () {
+          showBottomSheet(
+              context,
+              Task(
+                  title: 'xml',
+                  startTime: '20.50',
+                  endTime: ' 23.00',
+                  color: 1,
+                  note: 'klfnqfnfdfjqnbfjdfqfqlffjfbql',
+                  isCompleted: 1));
+        },
+        child: TaskTile(Task(
+            title: 'xml',
+            startTime: '20.50',
+            endTime: ' 23.00',
+            color: 1,
+            note: 'klfnqfnfdfjqnbfjdfqfqlffjfbql',
+            isCompleted: 1)),
+      ),
     );
     // return Obx(() {
     //   if (_taskController.taskList.isEmpty) {
@@ -193,6 +207,100 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  _buildBottomSheet(
+      {required String label,
+      required Function() onTap,
+      required Color clr,
+      bool isClose = false}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 3),
+        height: 65,
+        width: SizeConfig.screenWidth * 0.9,
+        decoration: BoxDecoration(
+          border: Border.all(
+              width: 2,
+              color: isClose
+                  ? Get.isDarkMode
+                      ? Colors.grey[600]!
+                      : Colors.grey[300]!
+                  : clr),
+          borderRadius: BorderRadius.circular(20),
+          color: isClose ? Colors.transparent : clr,
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: isClose
+                ? Themes().titleStyle
+                : Themes().titleStyle.copyWith(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+
+  showBottomSheet(BuildContext context, Task task) {
+    Get.bottomSheet(
+      SingleChildScrollView(
+        child: Container(
+            padding: EdgeInsets.only(top: 4),
+            width: SizeConfig.screenWidth,
+            height: (SizeConfig.orientation == Orientation.landscape)
+                ? (task.isCompleted == 1
+                    ? SizeConfig.screenHeight * 0.6
+                    : SizeConfig.screenHeight * 0.8)
+                : (task.isCompleted == 1
+                    ? SizeConfig.screenHeight * 0.30
+                    : SizeConfig.screenHeight * 0.39),
+            color: Get.isDarkMode ? darkHeaderClr : Colors.white,
+            child: Column(
+              children: [
+                Flexible(
+                    child: Container(
+                  height: 6,
+                  width: 120,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color:
+                          Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]),
+                )),
+                SizedBox(
+                  height: 20,
+                ),
+                task.isCompleted == 1
+                    ? Container()
+                    : _buildBottomSheet(
+                        label: 'Task completed',
+                        onTap: () {
+                          Get.back();
+                        },
+                        clr: primaryClr),
+                _buildBottomSheet(
+                    label: 'Delete completed',
+                    onTap: () {
+                      Get.back();
+                    },
+                    clr: primaryClr),
+                Divider(
+                  color: Get.isDarkMode ? Colors.grey : darkGreyClr,
+                ),
+                _buildBottomSheet(
+                    label: 'Cancel completed',
+                    onTap: () {
+                      Get.back();
+                    },
+                    clr: primaryClr),
+                SizedBox(
+                  height: 20,
+                )
+              ],
+            )),
+      ),
     );
   }
 }

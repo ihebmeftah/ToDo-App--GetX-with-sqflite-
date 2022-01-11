@@ -21,7 +21,7 @@ class Themes {
       brightness: Brightness.dark);
 
   TextStyle get headingStyle {
-    return GoogleFonts.dancingScript(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
             color: Get.isDarkMode ? Colors.white : darkGreyClr,
             fontSize: 24,
@@ -29,7 +29,7 @@ class Themes {
   }
 
   TextStyle get subHeadingStyle {
-    return GoogleFonts.dancingScript(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
             color: Get.isDarkMode ? Colors.white : darkGreyClr,
             fontSize: 20,
@@ -37,7 +37,7 @@ class Themes {
   }
 
   TextStyle get titleStyle {
-    return GoogleFonts.dancingScript(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
             color: Get.isDarkMode ? Colors.white : darkGreyClr,
             fontSize: 18,
@@ -45,7 +45,7 @@ class Themes {
   }
 
   TextStyle get subTitleStyle {
-    return GoogleFonts.dancingScript(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
             color: Get.isDarkMode ? Colors.white : darkGreyClr,
             fontSize: 16,
@@ -53,7 +53,7 @@ class Themes {
   }
 
   TextStyle get bodyStyle1 {
-    return GoogleFonts.dancingScript(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
             color: Get.isDarkMode ? Colors.white : darkGreyClr,
             fontSize: 14,
@@ -61,7 +61,7 @@ class Themes {
   }
 
   TextStyle get bodyStyle2 {
-    return GoogleFonts.dancingScript(
+    return GoogleFonts.lato(
         textStyle: TextStyle(
             color: Get.isDarkMode ? Colors.grey[200] : darkGreyClr,
             fontSize: 14,
