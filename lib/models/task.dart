@@ -9,4 +9,16 @@ class Task {
   int? color;
   int? remind;
   String? repeat;
+  Task({
+    this.id,
+    this.title,
+    this.note,
+    this.isCompleted,
+    this.date,
+    this.startTime,
+    this.endTime,
+    this.color,
+    this.remind,
+    this.repeat,
+  });
 }

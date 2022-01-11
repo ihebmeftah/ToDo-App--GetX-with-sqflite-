@@ -7,12 +7,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/controllers/task_controller.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/services/notification_services.dart';
 import 'package:todo/services/theme_services.dart';
 import 'package:todo/ui/pages/add_task_page.dart';
 import 'package:todo/ui/size_config.dart';
 import 'package:todo/ui/theme.dart';
 import 'package:todo/ui/widgets/button.dart';
+import 'package:todo/ui/widgets/task_tile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -137,7 +139,12 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     return Expanded(
-      child: _notTasks(),
+      child: TaskTile(Task(
+          title: 'xml',
+          startTime: '20.50',
+          endTime: ' 23.00',
+          color: 1,
+          note: 'klfnqfnfdfjqnbfjdfqfqlffjfbql')),
     );
     // return Obx(() {
     //   if (_taskController.taskList.isEmpty) {
