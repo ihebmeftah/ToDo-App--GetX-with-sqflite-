@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:todo/models/task.dart';
 
 class DBHelper {
   static const int _version = 1;
@@ -37,5 +38,29 @@ class DBHelper {
         print(e);
       }
     }
+  }
+
+  static Future<int> insert(Task? task) async {
+    print('insert function called');
+    return await db!.insert(_tableName, task!.tojson());
+  }
+
+  static Future<List<Map<String, Object?>>> query() async {
+    print('query function called');
+    return await db!.query(_tableName);
+  }
+
+  static Future<int> delete(Task? task) async {
+    print('delete function called');
+    return await db!.delete(_tableName, where: 'id : ?', whereArgs: [task!.id]);
+  }
+
+  static Future<int> updateraw(int id) async {
+    print('updateraw function called');
+    return await db!.rawUpdate('''
+    UPDATE tasks
+    WHERE isCompleted = ?
+    SET id = ? 
+    ''', [1, id]);
   }
 }
