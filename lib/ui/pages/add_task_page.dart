@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/controllers/task_controller.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/ui/theme.dart';
 import 'package:todo/ui/widgets/button.dart';
 import 'package:todo/ui/widgets/input_field.dart';
@@ -17,7 +18,8 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   final TaskController _taskController = Get.put(TaskController());
-  final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _tittleEditingController =
+      TextEditingController();
   final TextEditingController _noteEditingController = TextEditingController();
   final DateTime _selectedDate = DateTime.now();
   final String _startTime =
@@ -47,7 +49,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 style: Themes().titleStyle,
               ),
               const SizedBox(height: 10),
-              inputField(hintText: 'Title', controller: _textEditingController),
+              inputField(
+                  hintText: 'Title', controller: _tittleEditingController),
               const SizedBox(height: 10),
               Text(
                 'Note',
@@ -196,7 +199,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   MyButton(
                       label: 'Creat Task',
                       ontap: () {
-                        Get.back();
+                        valdidateDate();
                       })
                 ],
               ),
@@ -225,6 +228,41 @@ class _AddTaskPageState extends State<AddTaskPage> {
               color: primaryClr,
             ),
           ));
+  addTasktoDB() async {
+    int value = await _taskController.addTasks(
+        task: Task(
+            title: _tittleEditingController.text,
+            note: _noteEditingController.text,
+            isCompleted: 0,
+            date: DateFormat.yMd().format(_selectedDate),
+            startTime: _startTime,
+            endTime: _endTime,
+            color: _selectedColor,
+            remind: _selectedRemind,
+            repeat: _selectedRepeat));
+
+    print(value);
+  }
+
+  valdidateDate() {
+    if (_tittleEditingController.text.isNotEmpty &&
+        _noteEditingController.text.isNotEmpty) {
+      addTasktoDB();
+      Get.back();
+    } else if (_tittleEditingController.text.isEmpty ||
+        _noteEditingController.text.isEmpty) {
+      Get.snackbar('required', 'All Fields are required !',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.white,
+          colorText: pinkClr,
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.red,
+          ));
+    } else {
+      print('############ WARMING ############');
+    }
+  }
 
   Widget colorpalette() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

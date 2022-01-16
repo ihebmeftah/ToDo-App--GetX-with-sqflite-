@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:todo/ui/theme.dart';
 
 Widget inputField(
     {TextEditingController? controller,
@@ -18,20 +16,11 @@ Widget inputField(
       controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
-        hintStyle: const TextStyle(color: Colors.blueGrey, fontSize: 14),
+        hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
         label: label,
         hintText: hintText,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: primaryClr),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide:
-              BorderSide(color: Get.isDarkMode ? Colors.white : darkGreyClr),
-          borderRadius: BorderRadius.circular(4),
-        ),
       ));
 }

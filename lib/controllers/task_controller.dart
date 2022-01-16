@@ -14,5 +14,7 @@ class TaskController extends GetxController {
       color: 2,
     ),
   ];
+
+  addTasks({Task? task}){   }
   getTasks() {}
 }
