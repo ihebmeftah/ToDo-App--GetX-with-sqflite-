@@ -30,8 +30,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     notifyHelper = NotifyHelper();
-    notifyHelper.requestIosPermission();
-    notifyHelper.intializeNotification();
+    //notifyHelper.requestIosPermission();
+    notifyHelper.initializeNotification();
   }
 
   final TaskController _taskController = Get.put(TaskController());
@@ -73,8 +73,8 @@ class _HomePageState extends State<HomePage> {
             ),
             onPressed: () {
               ThemeServices().switchTheme();
-              NotifyHelper().dispalyNotification(
-                  title: 'theme changed', body: 'theme changed');
+              /* NotifyHelper().dispalyNotification(
+                  title: 'theme changed', body: 'theme changed');*/
               //  NotifyHelper().scheduledNotifications();
             },
           ));
@@ -147,7 +147,11 @@ class _HomePageState extends State<HomePage> {
         itemCount: _taskController.taskList.length,
         itemBuilder: (context, index) {
           var task = _taskController.taskList[index];
-
+          var hour = task.startTime.toString().split(':')[0];
+          var minutes = task.startTime.toString().split(':')[1];
+          debugPrint(hour);
+          debugPrint(minutes);
+          notifyHelper.scheduledNotification(int.parse(hour), int.parse(minutes.split('')[0]), task);
           return AnimationConfiguration.staggeredList(
             duration: Duration(milliseconds: 1375),
             position: index,
@@ -262,47 +266,47 @@ class _HomePageState extends State<HomePage> {
                     ? SizeConfig.screenHeight * 0.30
                     : SizeConfig.screenHeight * 0.39),
             color: Get.isDarkMode ? darkHeaderClr : Colors.white,
-            child: Column(
-              children: [
-                Flexible(
-                    child: Container(
-                  height: 6,
-                  width: 120,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color:
-                          Get.isDarkMode ? Colors.grey[600] : Colors.grey[300]),
-                )),
-                SizedBox(
-                  height: 20,
-                ),
-                task.isCompleted == 1
-                    ? Container()
-                    : _buildBottomSheet(
-                        label: 'Task completed',
-                        onTap: () {
-                          Get.back();
-                        },
-                        clr: primaryClr),
-                _buildBottomSheet(
-                    label: 'Delete ',
-                    onTap: () {
-                      Get.back();
-                    },
-                    clr: primaryClr),
-                Divider(
-                  color: Get.isDarkMode ? Colors.grey : darkGreyClr,
-                ),
-                _buildBottomSheet(
-                    label: 'Cancel ',
-                    onTap: () {
-                      Get.back();
-                    },
-                    clr: primaryClr),
-                SizedBox(
-                  height: 20,
-                )
-              ],
+            child: Center(
+              child: Column(
+                children: [
+                  Flexible(
+                      child: Container(
+                    height: 6,
+                    width: 120,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Get.isDarkMode
+                            ? Colors.grey[600]
+                            : Colors.grey[300]),
+                  )),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  task.isCompleted == 1
+                      ? Container()
+                      : _buildBottomSheet(
+                          label: 'Task completed',
+                          onTap: () {
+                            Get.back();
+                          },
+                          clr: primaryClr),
+                  _buildBottomSheet(
+                      label: 'Delete ',
+                      onTap: () {
+                        Get.back();
+                      },
+                      clr: primaryClr),
+                  _buildBottomSheet(
+                      label: 'Cancel ',
+                      onTap: () {
+                        Get.back();
+                      },
+                      clr: primaryClr),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              ),
             )),
       ),
     );
