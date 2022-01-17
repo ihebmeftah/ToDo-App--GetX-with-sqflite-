@@ -54,6 +54,10 @@ class NotifyHelper {
     await flutterLocalNotificationsPlugin.cancel(task.id!);
   }
 
+  cancelAllNotification() async {
+    await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
   displayNotification({required String title, required String body}) async {
     print('doing test');
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
@@ -95,9 +99,11 @@ class NotifyHelper {
   tz.TZDateTime _nextInstanceOfTenAM(
       int hour, int minutes, int remind, String repeat, String date) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
     var formatedDate = DateFormat().add_yM().parse(date);
+    final tz.TZDateTime fd = tz.TZDateTime.from(formatedDate, tz.local);
+
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, fd.year, fd.month, fd.day, hour, minutes);
     scheduledDate = afterRemind(remind, scheduledDate);
 
     if (scheduledDate.isBefore(now)) {
@@ -114,8 +120,8 @@ class NotifyHelper {
             (formatedDate.month) + 1, formatedDate.day, hour, minutes);
       }
       //scheduledDate = scheduledDate.subtract(const Duration(days: 7));
+      scheduledDate = afterRemind(remind, scheduledDate);
     }
-    scheduledDate = afterRemind(remind, scheduledDate);
 
     return scheduledDate;
   }

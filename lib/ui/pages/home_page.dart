@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     notifyHelper = NotifyHelper();
-    //notifyHelper.requestIosPermission();
+    notifyHelper.requestIOSPermissions();
     notifyHelper.initializeNotification();
 
     _taskController.getTasks();
@@ -64,7 +64,10 @@ class _HomePageState extends State<HomePage> {
                 size: 24,
                 color: Get.isDarkMode ? Colors.white : darkGreyClr,
               ),
-              onPressed: () => _taskController.deleteAllTasks(),
+              onPressed: () {
+                notifyHelper.cancelAllNotification();
+                _taskController.deleteAllTasks();
+              },
             ),
             CircleAvatar(
               backgroundImage: AssetImage('images/person.jpeg'),
