@@ -12,7 +12,7 @@ import 'services/theme_services.dart';
 import 'ui/pages/home_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized;
+  WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initDb();
   await GetStorage.init();
   runApp(const MyApp());

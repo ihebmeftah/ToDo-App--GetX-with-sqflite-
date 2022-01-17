@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     notifyHelper = NotifyHelper();
     //notifyHelper.requestIosPermission();
     notifyHelper.initializeNotification();
+    _taskController.getTasks();
   }
 
   final TaskController _taskController = Get.put(TaskController());
@@ -140,41 +141,47 @@ class _HomePageState extends State<HomePage> {
 
   _showTasks() {
     return Expanded(
-      child: ListView.builder(
-        scrollDirection: SizeConfig.orientation == Orientation.landscape
-            ? Axis.horizontal
-            : Axis.vertical,
-        itemCount: _taskController.taskList.length,
-        itemBuilder: (context, index) {
-          var task = _taskController.taskList[index];
-          var hour = task.startTime.toString().split(':')[0];
-          var minutes = task.startTime.toString().split(':')[1];
-          debugPrint(hour);
-          debugPrint(minutes);
-          notifyHelper.scheduledNotification(int.parse(hour), int.parse(minutes.split('')[0]), task);
-          return AnimationConfiguration.staggeredList(
-            duration: Duration(milliseconds: 1375),
-            position: index,
-            child: SlideAnimation(
-              horizontalOffset: 300,
-              child: FadeInAnimation(
-                child: GestureDetector(
-                  onTap: () => showBottomSheet(context, task),
-                  child: TaskTile(task),
-                ),
-              ),
-            ),
+      child: Obx(() {
+        if (_taskController.taskList.isEmpty) {
+          return _notTasks();
+        } else
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: SizeConfig.orientation == Orientation.landscape
+                ? Axis.horizontal
+                : Axis.vertical,
+            itemCount: _taskController.taskList.length,
+            itemBuilder: (context, index) {
+              var task = _taskController.taskList[index];
+
+              if (task.repeat == 'Daily' ||
+                  task.date == DateFormat().add_yMd().format(selectedDate)) {
+                var hour = task.startTime.toString().split(':')[0];
+                var minutes = task.startTime.toString().split(':')[1];
+              //  debugPrint(hour);
+               // debugPrint(minutes);
+                notifyHelper.scheduledNotification(
+                    int.parse(hour), int.parse(minutes.split('')[0]), task);
+                return AnimationConfiguration.staggeredList(
+                  duration: Duration(milliseconds: 800),
+                  position: index,
+                  child: SlideAnimation(
+                    horizontalOffset: 300,
+                    child: FadeInAnimation(
+                      child: GestureDetector(
+                        onTap: () => showBottomSheet(context, task),
+                        child: TaskTile(task),
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
           );
-        },
-      ),
+      }),
     );
-    // return Obx(() {
-    //   if (_taskController.taskList.isEmpty) {
-    //     return _notTasks();
-    //   } else {
-    //     return Container();
-    //   }
-    // });
   }
 
   _notTasks() {
@@ -192,7 +199,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizeConfig.orientation == Orientation.landscape
                     ? SizedBox(height: 6)
-                    : SizedBox(height: 220),
+                    : SizedBox(height: 6),
                 SvgPicture.asset(
                   'images/task.svg',
                   height: 90,
@@ -287,12 +294,14 @@ class _HomePageState extends State<HomePage> {
                       : _buildBottomSheet(
                           label: 'Task completed',
                           onTap: () {
+                            _taskController.markuscompleted(task.id!);
                             Get.back();
                           },
                           clr: primaryClr),
                   _buildBottomSheet(
                       label: 'Delete ',
                       onTap: () {
+                        _taskController.deleteTasks(task);
                         Get.back();
                       },
                       clr: primaryClr),
