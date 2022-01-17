@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -49,6 +50,10 @@ class NotifyHelper {
     );
   }
 
+  cancelNotification(Task task) async {
+    await flutterLocalNotificationsPlugin.cancel(task.id!);
+  }
+
   displayNotification({required String title, required String body}) async {
     print('doing test');
     var androidPlatformChannelSpecifics = const AndroidNotificationDetails(
@@ -73,7 +78,8 @@ class NotifyHelper {
       task.title,
       task.note,
       //tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-      _nextInstanceOfTenAM(hour, minutes),
+      _nextInstanceOfTenAM(
+          hour, minutes, task.remind!, task.repeat!, task.date!),
       const NotificationDetails(
         android: AndroidNotificationDetails(
             'your channel id', 'your channel name', 'your channel description'),
@@ -86,12 +92,49 @@ class NotifyHelper {
     );
   }
 
-  tz.TZDateTime _nextInstanceOfTenAM(int hour, int minutes) {
+  tz.TZDateTime _nextInstanceOfTenAM(
+      int hour, int minutes, int remind, String repeat, String date) {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
+    var formatedDate = DateFormat().add_yM().parse(date);
+    scheduledDate = afterRemind(remind, scheduledDate);
+
     if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
+      if (repeat == 'Daily') {
+        scheduledDate = tz.TZDateTime(tz.local, now.year, now.month,
+            (formatedDate.day) + 1, hour, minutes);
+      }
+      if (repeat == 'Weekly') {
+        scheduledDate = tz.TZDateTime(tz.local, now.year, now.month,
+            (formatedDate.day) + 7, hour, minutes);
+      }
+      if (repeat == 'Monthly ') {
+        scheduledDate = tz.TZDateTime(tz.local, now.year,
+            (formatedDate.month) + 1, formatedDate.day, hour, minutes);
+      }
+      //scheduledDate = scheduledDate.subtract(const Duration(days: 7));
+    }
+    scheduledDate = afterRemind(remind, scheduledDate);
+
+    return scheduledDate;
+  }
+
+  tz.TZDateTime afterRemind(int remind, tz.TZDateTime scheduledDate) {
+    if (remind == 5) {
+      scheduledDate = scheduledDate.subtract(const Duration(days: 5));
+    }
+
+    if (remind == 10) {
+      scheduledDate = scheduledDate.subtract(const Duration(days: 10));
+    }
+
+    if (remind == 15) {
+      scheduledDate = scheduledDate.subtract(const Duration(days: 15));
+    }
+
+    if (remind == 20) {
+      scheduledDate = scheduledDate.subtract(const Duration(days: 20));
     }
     return scheduledDate;
   }
@@ -151,13 +194,13 @@ class NotifyHelper {
       ),
     ); 
  */
-    Get.dialog( Text(body!));
+    Get.dialog(Text(body!));
   }
 
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen((String payload) async {
       debugPrint('My payload is ' + payload);
-      await Get.to(() => NotificationScreen(payLoad:payload));
+      await Get.to(() => NotificationScreen(payLoad: payload));
     });
   }
 }

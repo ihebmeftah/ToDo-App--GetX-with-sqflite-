@@ -250,14 +250,19 @@ class _AddTaskPageState extends State<AddTaskPage> {
       Get.back();
     } else if (_tittleEditingController.text.isEmpty ||
         _noteEditingController.text.isEmpty) {
-      Get.snackbar('required', 'All Fields are required !',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.white,
-          colorText: pinkClr,
-          icon: const Icon(
-            Icons.warning_amber_rounded,
-            color: Colors.red,
-          ));
+      Get.snackbar(
+        'required',
+        'All Fields are required !',
+        margin: const EdgeInsets.all(20),
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.white,
+        colorText: pinkClr,
+        icon: const Icon(
+          Icons.warning_amber_rounded,
+          color: Colors.red,
+        ),
+        isDismissible: true,
+      );
     } else {
       print('############ WARMING ############');
     }

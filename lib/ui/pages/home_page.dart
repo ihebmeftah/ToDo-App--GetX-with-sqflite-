@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, prefer_const_constructors, unused_element
+// ignore_for_file: unused_field, prefer_const_constructors, unused_element, unrelated_type_equality_checks
 
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     notifyHelper = NotifyHelper();
     //notifyHelper.requestIosPermission();
     notifyHelper.initializeNotification();
+
     _taskController.getTasks();
   }
 
@@ -56,7 +57,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   AppBar appbar() => AppBar(
-          actions: const [
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.cleaning_services,
+                size: 24,
+                color: Get.isDarkMode ? Colors.white : darkGreyClr,
+              ),
+              onPressed: () => _taskController.deleteAllTasks(),
+            ),
             CircleAvatar(
               backgroundImage: AssetImage('images/person.jpeg'),
             ),
@@ -155,11 +164,18 @@ class _HomePageState extends State<HomePage> {
               var task = _taskController.taskList[index];
 
               if (task.repeat == 'Daily' ||
-                  task.date == DateFormat().add_yMd().format(selectedDate)) {
+                  task.date == DateFormat().add_yMd().format(selectedDate) ||
+                  (task.repeat == 'Weekly' &&
+                      selectedDate
+                                  .difference(
+                                      DateFormat().add_yMd().parse(task.date!))
+                                  .inDays %
+                              7 ==
+                          0) ||
+                  (task.repeat == 'Monthly' &&
+                      DateFormat().parse(task.date!).day == selectedDate)) {
                 var hour = task.startTime.toString().split(':')[0];
                 var minutes = task.startTime.toString().split(':')[1];
-              //  debugPrint(hour);
-               // debugPrint(minutes);
                 notifyHelper.scheduledNotification(
                     int.parse(hour), int.parse(minutes.split('')[0]), task);
                 return AnimationConfiguration.staggeredList(
@@ -190,6 +206,7 @@ class _HomePageState extends State<HomePage> {
         AnimatedPositioned(
           duration: Duration(microseconds: 2000),
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Wrap(
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -199,20 +216,16 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizeConfig.orientation == Orientation.landscape
                     ? SizedBox(height: 6)
-                    : SizedBox(height: 6),
+                    : SizedBox(height: 100),
                 SvgPicture.asset(
                   'images/task.svg',
                   height: 90,
                   color: primaryClr.withOpacity(0.5),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-                  child: Text(
-                    'You do not have any task yet! \n add new task to make your days productive',
-                    style: Themes().subTitleStyle,
-                    textAlign: TextAlign.center,
-                  ),
+                Text(
+                  'You do not have any task yet!\n add new task to make your days productive',
+                  style: Themes().subTitleStyle,
+                  textAlign: TextAlign.center,
                 ),
                 SizeConfig.orientation == Orientation.landscape
                     ? SizedBox(height: 120)
@@ -301,6 +314,7 @@ class _HomePageState extends State<HomePage> {
                   _buildBottomSheet(
                       label: 'Delete ',
                       onTap: () {
+                        notifyHelper.cancelNotification(task);
                         _taskController.deleteTasks(task);
                         Get.back();
                       },

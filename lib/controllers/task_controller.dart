@@ -19,6 +19,10 @@ Future  getTasks() async {
     getTasks();
   }
 
+void deleteAllTasks() async {
+    await DBHelper.deleteAll();
+    getTasks();
+  }
   void markuscompleted(int id) async {
     await DBHelper.updateraw(id);
     getTasks();
